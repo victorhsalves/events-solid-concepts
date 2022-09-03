@@ -1,7 +1,7 @@
 import { User } from "../../entities/User";
 import { IUsersRepository } from "../IUsersRepositories";
 import { prisma } from '../../database/client'
-import { uuid } from "uuidv4";
+import { v4 } from "uuid";
 import bcrypt from 'bcrypt';
 import { user } from "@prisma/client";
 
@@ -50,7 +50,7 @@ export class UsersRepository implements IUsersRepository {
         try {
             await prisma.user.create({
                 data: {
-                    id: uuid(),
+                    id: v4(),
                     name: user.name,
                     cpf: user.cpf,
                     phone: user.phone,

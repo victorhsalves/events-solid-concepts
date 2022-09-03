@@ -9,5 +9,5 @@ export interface ICreateUserRequestDTO {
 	district: string;
 	city: string;
 	state: string;
-	country: string;
+	country: string; 
 }

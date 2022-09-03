@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model organization {
+  id                String              @id @db.VarChar(36)
+  name              String              @db.VarChar(150)
+  description       String?             @db.VarChar(400)
+  user_organization user_organization[]
+}
+
+model user {
+  id                String              @id @db.VarChar(36)
+  name              String              @db.VarChar(250)
+  cpf               String              @db.VarChar(11)
+  phone             String?             @db.VarChar(15)
+  email             String              @db.VarChar(150)
+  password          String              @db.VarChar(250)
+  address           String?             @db.VarChar(250)
+  zip_code          String?             @db.VarChar(250)
+  district          String?             @db.VarChar(250)
+  city              String?             @db.VarChar(250)
+  state             String?             @db.VarChar(250)
+  country           String?             @db.VarChar(250)
+  user_organization user_organization[]
+}
+
+model user_organization {
+  id              String       @id @db.VarChar(36)
+  user_id         String       @db.VarChar(36)
+  organization_id String       @db.VarChar(36)
+  user            user         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_organization_ibfk_1")
+  organization    organization @relation(fields: [organization_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_organization_ibfk_2")
+
+  @@index([organization_id], map: "organization_id")
+  @@index([user_id], map: "user_id")
+}

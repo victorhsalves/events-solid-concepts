@@ -1,5 +1,5 @@
 import { User } from "../../entities/User";
-import { IUsersRepository } from "../IUsersRepositories";
+import { IUsersRepository } from "../IUsersRepository";
 import { prisma } from '../../database/client'
 import { v4 } from "uuid";
 import bcrypt from 'bcrypt';
@@ -7,7 +7,7 @@ import { user } from "@prisma/client";
 
 
 export class UsersRepository implements IUsersRepository {
-    async findByEmail(email: string): Promise<user> {
+    async findByEmail(email: string): Promise<user | null> {
         try {
             const user = await prisma.user.findFirst({
                 where: {
@@ -17,36 +17,18 @@ export class UsersRepository implements IUsersRepository {
             if (user) {
                 return user;
             } else {
-                throw new Error('Usuário não encontrado!');
+                return null
             }
-        }catch(err: any) {
+        } catch (err: any) {
             throw new Error(err);
         }
     }
 
     async save(user: User): Promise<void> {
-        console.log('salvando')
-
-        const existing_user = await prisma.user.findFirst({
-            where: {
-                OR: [
-                    {
-                        cpf: user.cpf,
-                    },
-                    {
-                        email: user.email
-                    }
-                ]
-            }
-        })
-
-        if (existing_user) {
-            throw new Error('Usuário já cadastrado!')
-        }
 
         const salt = await bcrypt.genSalt(6);
         const hashedPwd = await bcrypt.hash(user.password, salt);
-        
+
         try {
             await prisma.user.create({
                 data: {
@@ -62,14 +44,13 @@ export class UsersRepository implements IUsersRepository {
                     city: user.city,
                     state: user.state,
                     country: user.country,
-    
+
                 }
             })
-        }catch(err: any) {
+        } catch (err: any) {
             throw new Error(err);
-            
+
         }
-        throw new Error("Method not implemented.");
     }
 
 }

@@ -1,5 +1,5 @@
 import { MailtrapMailProvider } from "../../providers/implementations/MailtrapMailProvider";
-import { UsersRepository } from "../../repositories/implementations/UsersRepositories";
+import { UsersRepository } from "../../repositories/implementations/UsersRepository";
 import { CreateUserController } from "./CreateUserController";
 import { CreateUserUseCase } from "./CreateUserUseCase";
 

@@ -29,7 +29,7 @@ router.post('/createOrganization',
         return createOrganizationController.handle(request, response);
     })
 
-router.post('/login', (request, response) => {
+router.post('/signin', (request, response) => {
     return loginController.handle(request, response);
 })
 

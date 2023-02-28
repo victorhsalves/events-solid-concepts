@@ -12,6 +12,7 @@ export class LoginController {
 
     async handle(request: Request, response: Response) {
         const { email, password } = request.body;
+        console.log('aqui entrou', email)
 
         try {
             const token = await this.loginUseCase.execute(email, password);

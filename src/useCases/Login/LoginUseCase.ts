@@ -1,6 +1,7 @@
 import { ILoginRepository } from "../../repositories/ILoginRepository";
 import jwt from "jsonwebtoken";
 import { env } from 'process';
+import bcrypt from 'bcrypt';
 
 
 
@@ -13,9 +14,10 @@ export class LoginUseCase {
 
     async execute(email: string, password: string) {
         const userExists = await this.loginRepository.findByEmail(email);
-
+        console.log(userExists);
         if (userExists) {
-            if (userExists.password === password) {
+            const comparison = await bcrypt.compare(password, userExists.password);
+            if (comparison) {
                 var secret: jwt.Secret = String(env.SECRET);
 
                 const token = jwt.sign(
